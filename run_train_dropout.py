@@ -1,9 +1,12 @@
 import argparse
+import os
 
 import torch
 import torch.optim
 import torch.utils.data
 import torch.utils.tensorboard
+
+from tqdm import tqdm
 
 import src
 
@@ -12,6 +15,12 @@ def parse_args():
     parser.add_argument(
         '--batch_size',
         help='Batch size.',
+        required=True,
+        type=int
+    )
+    parser.add_argument(
+        '--ckpt_step',
+        help='Checkpoint save interval.',
         required=True,
         type=int
     )
@@ -29,6 +38,12 @@ def parse_args():
         type=str
     )
     parser.add_argument(
+        '--exp_name',
+        help='Name of the experiment.',
+        required=True,
+        type=str
+    )
+    parser.add_argument(
         '--p_in',
         help='Input units dropout rate.',
         required=True,
@@ -39,6 +54,12 @@ def parse_args():
         help='Hidden units dropout rate.',
         required=True,
         type=float
+    )
+    parser.add_argument(
+        '--log_step',
+        help='Logging interval.',
+        required=True,
+        type=int
     )
     parser.add_argument(
         '--lr',
@@ -73,7 +94,7 @@ def parse_args():
 
     return parser.parse_args()
 
-if __name__ == '__main__':
+def main():
     # Parse argument.
     args = parse_args()
 
@@ -96,6 +117,12 @@ if __name__ == '__main__':
         shuffle=True
     )
 
+    # Get experiment path and loggin path.
+    exp_path = os.path.join(src.path.EXP_PATH, args.exp_name)
+    log_path = os.path.join(src.path.LOG_PATH, args.exp_name)
+    if not os.path.exists(exp_path):
+        os.makedirs(exp_path)
+
     # Get model.
     model = src.model.DropoutNN(
         d_in=dataset_module.get_d_in(),
@@ -117,15 +144,29 @@ if __name__ == '__main__':
     # Get objective.
     criterion = torch.nn.CrossEntropyLoss()
 
+    # Get logger.
+    writer = torch.utils.tensorboard.SummaryWriter(log_path)
+
+    # Total loss.
+    total_loss = 0.0
+    pre_total_loss = 0.0
+
     # Training step counter.
     step = 0
     while step <= args.total_step:
-        for x, y in data_loader:
+        epoch_loader = tqdm(
+            data_loader,
+            desc=f'loss: {pre_total_loss:.6f}'
+        )
+        for x, y in epoch_loader:
             x = x.reshape(-1, dataset_module.get_d_in()).to(device)
             y = y.to(device)
 
             # Forward pass.
             loss = criterion(model(x), y)
+
+            # Record average loss.
+            total_loss += loss.item() / args.log_step
 
             # Backward pass.
             loss.backward()
@@ -141,3 +182,28 @@ if __name__ == '__main__':
 
             if step > args.total_step:
                 break
+
+            # Ckeckpoint save step.
+            if step % args.ckpt_step == 0:
+                torch.save(
+                    model.state_dict(),
+                    os.path.join(exp_path, f'model-{step}.pt')
+                )
+
+            # Performance logging step.
+            if step % args.log_step == 0:
+                # Log average loss on CLI.
+                epoch_loader.set_description(f'loss: {total_loss:.6f}')
+
+                # Log average loss on tensorboard.
+                writer.add_scalar('loss', total_loss, step)
+
+                # Clean up average loss.
+                pre_total_loss = total_loss
+                total_loss = 0.0
+
+    # Close logger.
+    writer.close()
+
+if __name__ == '__main__':
+    main()

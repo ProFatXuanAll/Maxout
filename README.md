@@ -19,5 +19,18 @@ pipenv install
 ### Dropout
 
 ```sh
-python run_train_dropout.py --batch_size 32 --d_hid 1024 --dataset mnist --p_in 0.2 --p_hid 0.5 --lr 1e-4 --max_norm 2 --momentum 0.95 --seed 42 --total_step 100000
+python run_train_dropout.py \
+--batch_size 32 \
+--ckpt_step 2000 \
+--d_hid 1024 \
+--dataset mnist \
+--exp_name dropout \
+--p_in 0.2 \
+--p_hid 0.5 \
+--log_step 1000 \
+--lr 1e-4 \
+--max_norm 2 \
+--momentum 0.95 \
+--seed 42 \
+--total_step 100000
 ```

@@ -6,3 +6,5 @@ PROJECT_ROOT = os.path.abspath(os.path.join(
     os.pardir
 ))
 DATA_PATH = os.path.join(PROJECT_ROOT, 'data')
+EXP_PATH = os.path.join(DATA_PATH, 'exp')
+LOG_PATH = os.path.join(DATA_PATH, 'log')
