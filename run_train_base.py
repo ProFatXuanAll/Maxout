@@ -46,12 +46,6 @@ def parse_args():
         type=str
     )
     parser.add_argument(
-        '--n_layer',
-        help='Number of hidden layers.',
-        required=True,
-        type=int
-    )
-    parser.add_argument(
         '--log_step',
         help='Logging interval.',
         required=True,
@@ -74,6 +68,12 @@ def parse_args():
         help='SGD momentum.',
         required=True,
         type=float
+    )
+    parser.add_argument(
+        '--n_layer',
+        help='Number of hidden layers.',
+        required=True,
+        type=int
     )
     parser.add_argument(
         '--seed',

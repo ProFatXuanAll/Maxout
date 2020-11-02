@@ -26,11 +26,11 @@ python run_train_base.py \
 --d_hid 1024 \
 --dataset mnist \
 --exp_name baseline \
---n_layer 1 \
 --log_step 2500 \
 --lr 1e-4 \
 --max_norm 2 \
 --momentum 0.95 \
+--n_layer 1 \
 --seed 42 \
 --total_step 100000
 ```
@@ -45,13 +45,13 @@ python run_train_dropout.py \
 --d_hid 1024 \
 --dataset mnist \
 --exp_name dropout \
---n_layer 1 \
---p_in 0.2 \
---p_hid 0.5 \
 --log_step 2500 \
 --lr 1e-4 \
 --max_norm 2 \
 --momentum 0.95 \
+--n_layer 1 \
+--p_in 0.2 \
+--p_hid 0.5 \
 --seed 42 \
 --total_step 100000
 ```
@@ -67,11 +67,11 @@ python run_train_maxout.py \
 --dataset mnist \
 --exp_name maxout \
 --k 4 \
---n_layer 1 \
 --log_step 2500 \
 --lr 1e-4 \
 --max_norm 2 \
 --momentum 0.95 \
+--n_layer 1 \
 --seed 42 \
 --total_step 100000
 ```
@@ -122,3 +122,24 @@ python run_eval_maxout.py \
 --batch_size 128 \
 --exp_name maxout
 ```
+
+## Experiment Results
+
+### MNIST
+
+#### Shared Configuration
+
+|batch_size|ckpt_step|log_step|lr|max_norm|momentum|seed|total_step|
+|-|-|-|-|-|-|-|-|
+|32|5000|2500|1e-4|2|0.95|42|100000|
+
+#### Results & Configuration
+
+|model|train-acc|test-acc|d_hid|k|n_layer|p_in|p_hid|
+|-|-|-|-|-|-|-|-|
+|baseline|0.9547|0.9537|1024|N/A|1|N/A|N/A|
+|baseline|0.9604|0.9571|4096|N/A|1|N/A|N/A|
+|dropout|0.9571|0.9573|1024|N/A|1|0.2|0.5|
+|dropout|0.9604|0.9590|4096|N/A|1|0.2|0.5|
+|maxout|0.9705|0.9656|256|4|1|N/A|N/A|
+|maxout|0.9732|0.9670|1024|4|1|N/A|N/A|
