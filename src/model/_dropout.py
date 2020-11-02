@@ -2,8 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from src.model._base import BaseNN
-
 
 class DropoutNN(nn.Module):
     def __init__(

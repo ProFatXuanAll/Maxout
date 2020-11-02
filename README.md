@@ -76,6 +76,28 @@ python run_train_maxout.py \
 --total_step 100000
 ```
 
+### Maxout with Dropout
+
+```sh
+# Training script.
+python run_train_maxout_with_dropout.py \
+--batch_size 32 \
+--ckpt_step 5000 \
+--d_hid 1024 \
+--dataset mnist \
+--exp_name maxout_wdp \
+--k 4 \
+--log_step 2500 \
+--lr 1e-4 \
+--max_norm 2 \
+--momentum 0.95 \
+--n_layer 1 \
+--p_in 0.2 \
+--p_hid 0.5 \
+--seed 42 \
+--total_step 100000
+```
+
 ## Evaluate
 
 ### Baseline
@@ -123,6 +145,21 @@ python run_eval_maxout.py \
 --exp_name maxout
 ```
 
+### Maxout with Dropout
+
+```sh
+# Evaluation script on training set.
+python run_eval_maxout_with_dropout.py \
+--batch_size 128 \
+--exp_name maxout_wdp \
+--is_train
+
+# Evaluation script on testing set.
+python run_eval_maxout_with_dropout.py \
+--batch_size 128 \
+--exp_name maxout_wdp
+```
+
 ## Experiment Results
 
 ### MNIST
@@ -155,3 +192,4 @@ python run_eval_maxout.py \
 |maxout|0.9829|0.9749|256|4|2|N/A|N/A|
 |maxout|0.9861|0.9763|1024|4|2|N/A|N/A|
 |maxout|0.9871|0.9761|1200|4|2|N/A|N/A|
+|maxout+dropout|0.|0.|1024|4|1|N/A|N/A|

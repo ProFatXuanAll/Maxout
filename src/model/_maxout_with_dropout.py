@@ -2,28 +2,39 @@ import torch
 import torch.nn as nn
 
 
-class MaxoutNN(nn.Module):
+class MaxoutWithDropoutNN(nn.Module):
     def __init__(
         self,
         d_in: int,
         d_hid: int,
         d_out: int,
         k: int,
-        n_layer: int
+        n_layer: int,
+        p_in: float,
+        p_hid: float
     ):
         super().__init__()
         self.l_in = nn.ModuleList([
-            nn.Linear(in_features=d_in, out_features=d_hid)
+            nn.Sequential(
+                nn.Dropout(p=p_in),
+                nn.Linear(in_features=d_in, out_features=d_hid)
+            )
             for _ in range(k)
         ])
         self.l_hids = nn.ModuleList([
             nn.ModuleList([
-                nn.Linear(in_features=d_hid, out_features=d_hid)
+                nn.Sequential(
+                    nn.Dropout(p=p_hid),
+                    nn.Linear(in_features=d_hid, out_features=d_hid)
+                )
                 for _ in range(k)
             ])
             for _ in range(n_layer - 1)
         ])
-        self.l_out = nn.Linear(in_features=d_hid, out_features=d_out)
+        self.l_out = nn.Sequential(
+            nn.Dropout(p=p_hid),
+            nn.Linear(in_features=d_hid, out_features=d_out)
+        )
 
     def forward(self, x):
         # (B, K, H)
