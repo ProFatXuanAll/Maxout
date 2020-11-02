@@ -3,6 +3,7 @@ import torch.nn as nn
 
 from src.model._base import BaseNN
 
+
 class MaxoutNN(nn.Module):
     def __init__(
         self,

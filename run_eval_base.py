@@ -86,13 +86,11 @@ def main():
     # Evaluate each checkpoint.
     for ckpt in tqdm(all_ckpts):
         # Get model.
-        model = src.model.DropoutNN(
+        model = src.model.BaseNN(
             d_in=dataset_module.get_d_in(),
             d_hid=cfg.d_hid,
             d_out=dataset_module.get_d_out(),
-            n_layer=cfg.n_layer,
-            p_in=cfg.p_in,
-            p_hid=cfg.p_hid
+            n_layer=cfg.n_layer
         )
         model.load_state_dict(torch.load(os.path.join(
             exp_path,

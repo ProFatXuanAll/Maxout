@@ -2,21 +2,29 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 class BaseNN(nn.Module):
     def __init__(
             self,
             d_in: int,
             d_hid: int,
-            d_out: int
+            d_out: int,
+            n_layer: int,
     ):
         super().__init__()
-        self.l1 = nn.Linear(in_features=d_in, out_features=d_hid)
-        self.l2 = nn.Linear(in_features=d_hid, out_features=d_hid)
-        self.l3 = nn.Linear(in_features=d_hid, out_features=d_hid)
-        self.out = nn.Linear(in_features=d_hid, out_features=d_out)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        h1 = F.relu(self.l1(x))
-        h2 = F.relu(self.l2(h1))
-        h3 = F.relu(self.l3(h2))
-        return self.out(h3)
+        layers = [
+            nn.Linear(in_features=d_in, out_features=d_hid),
+            nn.ReLU(),
+        ]
+
+        for _ in range(n_layer - 1):
+            layers.append(nn.Linear(in_features=d_hid, out_features=d_hid))
+            layers.append(nn.ReLU())
+
+        layers.append(nn.Linear(in_features=d_hid, out_features=d_out))
+
+        self.layers = nn.Sequential(*layers)
+
+    def forward(self, x):
+        return self.layers(x)

@@ -52,18 +52,6 @@ def parse_args():
         type=int
     )
     parser.add_argument(
-        '--p_in',
-        help='Input units dropout rate.',
-        required=True,
-        type=float
-    )
-    parser.add_argument(
-        '--p_hid',
-        help='Hidden units dropout rate.',
-        required=True,
-        type=float
-    )
-    parser.add_argument(
         '--log_step',
         help='Logging interval.',
         required=True,
@@ -137,13 +125,11 @@ def main():
     )
 
     # Get model.
-    model = src.model.DropoutNN(
+    model = src.model.BaseNN(
         d_in=dataset_module.get_d_in(),
         d_hid=args.d_hid,
         d_out=dataset_module.get_d_out(),
-        n_layer=args.n_layer,
-        p_in=args.p_in,
-        p_hid=args.p_hid
+        n_layer=args.n_layer
     )
     model.train()
     model = model.to(device)
