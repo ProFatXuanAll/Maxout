@@ -26,3 +26,6 @@ def get_d_out() -> int:
 
 def get_eval(pred: Sequence[int], ans: Sequence[int]) -> float:
     return accuracy_score(pred, ans)
+
+def get_eval_name(train: bool) -> str:
+    return 'train/acc' if train else 'test/acc'

@@ -1,4 +1,5 @@
 import argparse
+import json
 import os
 
 import torch
@@ -98,6 +99,16 @@ def main():
     # Parse argument.
     args = parse_args()
 
+    # Get experiment path and loggin path.
+    exp_path = os.path.join(src.path.EXP_PATH, args.exp_name)
+    log_path = os.path.join(src.path.LOG_PATH, args.exp_name)
+    if not os.path.exists(exp_path):
+        os.makedirs(exp_path)
+
+    # Save configuration.
+    with open(os.path.join(exp_path, 'cfg.json'), 'w') as output_file:
+        json.dump(args.__dict__, output_file)
+
     # Set random seed.
     src.util.set_seed(seed=args.seed)
 
@@ -116,12 +127,6 @@ def main():
         batch_size=args.batch_size,
         shuffle=True
     )
-
-    # Get experiment path and loggin path.
-    exp_path = os.path.join(src.path.EXP_PATH, args.exp_name)
-    log_path = os.path.join(src.path.LOG_PATH, args.exp_name)
-    if not os.path.exists(exp_path):
-        os.makedirs(exp_path)
 
     # Get model.
     model = src.model.DropoutNN(
