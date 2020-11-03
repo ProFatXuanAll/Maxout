@@ -198,3 +198,9 @@ python run_eval_maxout_with_dropout.py \
 |maxout+dropout|0.9801|0.9737|256|4|2|0.2|0.5|
 |maxout+dropout|0.9819|0.9747|1024|4|2|0.2|0.5|
 |maxout+dropout|0.9818|0.9745|1200|4|2|0.2|0.5|
+
+### Hyperparameters Search
+
+|model|train-acc|test-acc|batch_size|ckpt_step|d_hid|k|log_step|lr|max_norm|momentum|n_layer|p_in|p_hid|seed|total_step|
+|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
+|maxout+dropout|0.9818|0.9864|32|5000|1200|4|2500|1e-3|2|0.95|2|0.2|0.5|42|100000|
