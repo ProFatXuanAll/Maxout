@@ -192,4 +192,9 @@ python run_eval_maxout_with_dropout.py \
 |maxout|0.9829|0.9749|256|4|2|N/A|N/A|
 |maxout|0.9861|0.9763|1024|4|2|N/A|N/A|
 |maxout|0.9871|0.9761|1200|4|2|N/A|N/A|
-|maxout+dropout|0.|0.|1024|4|1|N/A|N/A|
+|maxout+dropout|0.9708|0.9665|256|4|1|0.2|0.5|
+|maxout+dropout|0.9714|0.9659|1024|4|1|0.2|0.5|
+|maxout+dropout|0.9721|0.9674|1200|4|1|0.2|0.5|
+|maxout+dropout|0.9801|0.9737|256|4|2|0.2|0.5|
+|maxout+dropout|0.9819|0.9747|1024|4|2|0.2|0.5|
+|maxout+dropout|0.9818|0.9745|1200|4|2|0.2|0.5|
